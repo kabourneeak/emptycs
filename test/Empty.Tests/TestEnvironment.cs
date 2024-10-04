@@ -1,5 +1,7 @@
+using Empty.Sdk;
 using Flurl.Http.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Time.Testing;
 
 namespace Empty.Tests;
@@ -9,16 +11,23 @@ namespace Empty.Tests;
 /// </summary>
 public sealed class TestEnvironment : IDisposable, IAsyncDisposable
 {
+    private readonly CompositeDisposable _envVars;
+
     private readonly TestApiServer? _apiServer;
 
     public TestEnvironment(
         bool useApiServer,
         Action<IServiceCollection>? apiServiceOverrides = default)
     {
-        Http = new HttpTest();
-        Time = new FakeTimeProvider();
+        // set the environment variables
+        _envVars = new CompositeDisposable(
+            new DisposableEnvironmentVariable("ASPNETCORE_ENVIRONMENT", Environments.Development));
 
-        // set the current time to a known value
+        // set the http edge
+        Http = new HttpTest();
+
+        // set the time edge
+        Time = new FakeTimeProvider();
         Time.SetUtcNow(new DateTime(2024, 1, 1));
 
         if (useApiServer)
@@ -26,6 +35,10 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
             _apiServer = new TestApiServer(
                 Time,
                 apiServiceOverrides);
+
+            // allow real HTTP calls to the Test API server
+            Http.ForCallsTo(_apiServer.BaseUrl.AppendPathSegment("*"))
+                .AllowRealHttp();
         }
     }
 
@@ -65,6 +78,7 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
     public void Dispose()
     {
         _apiServer?.Dispose();
+        _envVars.Dispose();
     }
 
     /// <inheritdoc/>
@@ -74,5 +88,7 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
         {
             await _apiServer.DisposeAsync();
         }
+
+        _envVars.Dispose();
     }
 }
