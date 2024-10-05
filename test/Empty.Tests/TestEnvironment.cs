@@ -15,9 +15,13 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
 
     private readonly TestApiServer? _apiServer;
 
+    private readonly TestCli? _cli;
+
     public TestEnvironment(
         bool useApiServer,
-        Action<IServiceCollection>? apiServiceOverrides = default)
+        bool useCli,
+        Action<IServiceCollection>? apiServiceOverrides = default,
+        Action<IServiceCollection>? cliServiceOverrides = default)
     {
         // set the environment variables
         _envVars = new CompositeDisposable(
@@ -29,7 +33,7 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
 
         // set the time edge
         Time = new FakeTimeProvider();
-        Time.SetUtcNow(new DateTime(2024, 1, 1));
+        Time.SetUtcNow(new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 
         if (useApiServer)
         {
@@ -40,6 +44,13 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
             // allow real HTTP calls to the Test API server
             Http.ForCallsTo(_apiServer.BaseUrl.AppendPathSegment("*"))
                 .AllowRealHttp();
+        }
+
+        if (useCli)
+        {
+            _cli = new TestCli(
+                Time,
+                cliServiceOverrides);
         }
     }
 
@@ -58,6 +69,9 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
     /// </summary>
     public TestApiServer ApiServer => _apiServer
         ?? throw new InvalidOperationException("API Server is not enabled in this environment.");
+
+    public TestCli Cli => _cli
+        ?? throw new InvalidOperationException("CLI is not enabled in this environment.");
 
     /// <summary>
     /// Start the API Server, if configured, along with other long-running
@@ -78,6 +92,7 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
+        _cli?.Dispose();
         _apiServer?.Dispose();
         _envVars.Dispose();
     }
@@ -85,6 +100,8 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
+        _cli?.Dispose();
+
         if (_apiServer is not null)
         {
             await _apiServer.DisposeAsync();

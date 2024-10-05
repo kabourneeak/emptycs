@@ -4,15 +4,30 @@ namespace Empty.Tests;
 
 public class TestEnvironmentBuilder
 {
-    bool _useApiServer;
+    private bool _useApiServer;
 
-    Action<IServiceCollection>? _apiServiceOverrides;
+    private Action<IServiceCollection>? _apiServiceOverrides;
+
+    private bool _useCli;
+
+    private Action<IServiceCollection>? _cliServiceOverrides;
 
     public TestEnvironmentBuilder WithApiServer(
-        Action<IServiceCollection>? apiServiceOverrides = default)
+        Action<IServiceCollection>? apiServiceOverrides = default
+    )
     {
         _useApiServer = true;
         _apiServiceOverrides = apiServiceOverrides;
+
+        return this;
+    }
+
+    public TestEnvironmentBuilder WithCli(
+        Action<IServiceCollection>? cliServiceOverrides = default
+    )
+    {
+        _useCli = true;
+        _cliServiceOverrides = cliServiceOverrides;
 
         return this;
     }
@@ -21,6 +36,8 @@ public class TestEnvironmentBuilder
     {
         return new TestEnvironment(
             _useApiServer,
-            _apiServiceOverrides);
+            _useCli,
+            _apiServiceOverrides,
+            _cliServiceOverrides);
     }
 }

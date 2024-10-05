@@ -8,6 +8,10 @@ using ApiProgram = Empty.Api.Program;
 
 namespace Empty.Tests;
 
+/// <summary>
+/// A test harness for standing up an instance of the API Server for testing.
+/// This class expects to be created and managed by <see cref="TestEnvironment"/>.
+/// </summary>
 public sealed class TestApiServer : IDisposable, IAsyncDisposable
 {
     private readonly CompositeDisposable _envVars;
@@ -16,7 +20,7 @@ public sealed class TestApiServer : IDisposable, IAsyncDisposable
 
     public TestApiServer(
         FakeTimeProvider timeProvider,
-        Action<IServiceCollection>? serviceOverrides = default)
+        Action<IServiceCollection>? apiServiceOverrides = default)
     {
         var defaultServiceOverrides = new Action<IServiceCollection>(services =>
         {
@@ -35,7 +39,7 @@ public sealed class TestApiServer : IDisposable, IAsyncDisposable
         _envVars = new CompositeDisposable(
             new DisposableEnvironmentVariable("ASPNETCORE_URLS", BaseUrl));
 
-        _host = ApiProgram.MainInternal(serviceOverrides: defaultServiceOverrides + serviceOverrides);
+        _host = ApiProgram.MainInternal(serviceOverrides: defaultServiceOverrides + apiServiceOverrides);
     }
 
     /// <summary>
