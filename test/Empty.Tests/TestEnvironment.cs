@@ -21,7 +21,8 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
     {
         // set the environment variables
         _envVars = new CompositeDisposable(
-            new DisposableEnvironmentVariable("ASPNETCORE_ENVIRONMENT", Environments.Development));
+            new DisposableEnvironmentVariable("ASPNETCORE_ENVIRONMENT", Environments.Development),
+            new DisposableEnvironmentVariable("DOTNET_ENVIRONMENT", Environments.Development));
 
         // set the http edge
         Http = new HttpTest();

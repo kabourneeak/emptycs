@@ -26,13 +26,28 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Empty.Cli/bin/Debug/net8.0/Empty.Cli.dll",
+            "program": "${workspaceFolder}/src/Empty.Cli/bin/Debug/net8.0/emptycli.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Empty.Cli",
             "stopAtEntry": false,
             "env": {
                 "DOTNET_ENVIRONMENT": "Development",
             }
-        }        
+        },
+        {
+            "name": ".NET Core Launch (Cli ping)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/Empty.Cli/bin/Debug/net8.0/emptycli.dll",
+            "args": [
+                "ping"
+            ],
+            "cwd": "${workspaceFolder}/src/Empty.Cli",
+            "stopAtEntry": false,
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development",
+            }
+        }
     ]
 }
