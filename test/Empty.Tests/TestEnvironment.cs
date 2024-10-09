@@ -31,7 +31,7 @@ public sealed class TestEnvironment : IDisposable, IAsyncDisposable
         // set the http edge
         Http = new HttpTest();
 
-        // set the time edge
+        // set the time edge, ensuring that we control the time zone
         Time = new FakeTimeProvider();
         Time.SetUtcNow(new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 

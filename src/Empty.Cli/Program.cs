@@ -20,7 +20,7 @@ public class Program
         string[] args,
         Action<IServiceCollection>? serviceOverrides = default)
     {
-        var host = CreateDefaultBuilder(args, serviceOverrides)
+        using var host = CreateDefaultBuilder(args, serviceOverrides)
             .Build();
 
         return host.RunCliAsync(args);

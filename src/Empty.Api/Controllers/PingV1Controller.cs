@@ -1,7 +1,5 @@
-using System.Net.Mime;
 using Empty.Sdk.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 
 namespace Empty.Api.Controllers;
 

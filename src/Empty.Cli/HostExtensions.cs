@@ -36,6 +36,7 @@ public static class HostExtensions
                 .WithDescription("Ping the server.");
         });
 
+        services.AddSingleton<ITypeRegistrar>(typeRegistrar);
         services.AddSingleton<ICommandApp>(app);
 
         return services;

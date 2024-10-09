@@ -27,9 +27,7 @@ public sealed class TypeResolver : ITypeResolver, IDisposable
 
     public void Dispose()
     {
-        if (_provider is IDisposable disposable)
-        {
-            disposable.Dispose();
-        }
+        // The underlying IServiceProvider is owned by the host
+        // so we don't dispose it here.
     }
 }

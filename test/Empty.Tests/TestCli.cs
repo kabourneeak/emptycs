@@ -62,14 +62,14 @@ public sealed class TestCli : IDisposable
         cmdApp.Configure(c => c.ConfigureConsole(console));
 
         // wire up the command interceptor
-        CommandContext? context = null;
-        CommandSettings? settings = null;
+        var context = default(CommandContext?);
+        var settings = default(CommandSettings?);
 
         cmdApp.Configure(c => c.SetInterceptor(new CallbackCommandInterceptor((ctx, s) =>
         {
             context = ctx;
             settings = s;
-        })));        
+        })));
 
         // run the CLI program
         var exitCode = await host.RunCliAsync(args);

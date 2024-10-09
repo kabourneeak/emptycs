@@ -128,3 +128,24 @@ and debugging
 the projects within VS Code, respectively.
 
 The files are provided in this repository.
+
+## Test Environment
+
+Wherever possible, we follow the [Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)
+and use integration tests.
+
+Much of the overall architecture is influenced by testability and a desire to keep "test debt" to a minimum.
+
+- Testability refers to how easily a test can be arranged,
+  and how easily a positive assertion can be made,
+  e.g., by asserting domain state or output, rather than the absense of a fault or side effect.
+- Test Debt refers to how focused the arrangements of a test are,
+  and how coupled a test is to internal machinations versus public interfaces.
+  High test debt is usually indicated by lengthy arrangements
+  and churn on tests which are increasingly distant from a given code change.
+
+The `TestEnvironment` class configures real instances of each element of the
+to work together with as few substitutions as possible.
+The edges of the project (e.g., time, network) are isolated and easily accessed,
+and mechanisms for surgically overriding specific dependencies or configuration
+are provided.
