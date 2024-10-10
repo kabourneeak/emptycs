@@ -1,5 +1,6 @@
 using Empty.Api.Controllers;
-using Empty.Sdk.Dtos;
+using Empty.Sdk.Endpoints;
+using Empty.Sdk.Models;
 using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,7 @@ public class PingTests
     }
 
     [Test]
-    public async Task Ping_Url_ShouldReturnTime()
+    public async Task Ping_Endpoint_ShouldReturnTime()
     {
         // arrange
         await using var env = new TestEnvironmentBuilder()
@@ -40,12 +41,10 @@ public class PingTests
 
         await env.StartAsync();
 
-        var subject = env.ApiServer.Services.GetRequiredService<PingV1Controller>();
+        var subject = env.ApiServer.Services.GetRequiredService<PingV1Endpoints>();
 
         // act
-        var result = await env.ApiServer.BaseUrl
-            .AppendPathSegments("api", "ping", "v1", "time")
-            .GetJsonAsync<TimeDto>();
+        var result = await subject.Time(CancellationToken.None);
 
         // assert
         Assert.That(result.Time, Is.EqualTo(env.Time.GetUtcNow()));

@@ -1,3 +1,4 @@
+using Empty.Sdk.Endpoints;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,8 @@ public static class HostExtensions
 
         services.AddKeyedSingleton<IFlurlClient>(ApiClientKey, (c, _) =>
             c.GetRequiredService<IFlurlClientCache>().Get(ApiClientKey));
+
+        services.AddSingleton<PingV1Endpoints>();
 
         return services;
     }

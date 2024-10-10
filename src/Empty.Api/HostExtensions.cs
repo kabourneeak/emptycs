@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Empty.Sdk;
 
 namespace Empty.Api;
 
@@ -12,6 +13,8 @@ internal static class HostExtensions
     public static IHostApplicationBuilder AddApi(this IHostApplicationBuilder builder)
     {
         builder.Services.TryAddSingleton(TimeProvider.System);
+
+        builder.Services.AddSdk();
 
         return builder;
     }

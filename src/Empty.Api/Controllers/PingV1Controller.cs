@@ -1,4 +1,4 @@
-using Empty.Sdk.Dtos;
+using Empty.Sdk.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Empty.Api.Controllers;

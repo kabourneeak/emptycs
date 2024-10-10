@@ -1,0 +1,22 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# C# specific rules
+[*.cs]
+dotnet_naming_rule.private_fields_should_have_leading_underscore.severity = suggestion
+dotnet_naming_rule.private_fields_should_have_leading_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_should_have_leading_underscore.style = leading_underscore
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers = 
+
+dotnet_naming_style.leading_underscore.required_prefix = _
+dotnet_naming_style.leading_underscore.capitalization = camel_case

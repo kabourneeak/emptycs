@@ -1,4 +1,4 @@
-namespace Empty.Sdk.Dtos;
+namespace Empty.Sdk.Models;
 
 /// <summary>
 /// Represents a time value.
